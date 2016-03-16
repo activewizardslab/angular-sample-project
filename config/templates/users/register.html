@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Register page</title>
+ 
+		<!-- BOOTSTRAP CSS (REQUIRED ALL PAGE)-->
+		<link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+
+		<!-- MAIN CSS (REQUIRED ALL PAGE)-->
+		<link href="{% static 'assets/plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+		<link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+		<link href="{% static 'assets/css/style-responsive.css' %}" rel="stylesheet">
+ 
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body class="login tooltips">
+		<!--
+		===========================================================
+		BEGIN PAGE
+		===========================================================
+		-->
+		<div class="login-header text-center">
+			<img src="{% static 'assets/img/logo-login.png' %}" class="logo" alt="Logo">
+		</div>
+		<div class="login-wrapper">
+			<form role="form">
+				<div class="form-group has-feedback lg left-feedback no-label">
+				  <input type="text" class="form-control no-border input-lg rounded" placeholder="Full name" autofocus>
+				  <span class="fa fa-male form-control-feedback"></span>
+				</div>
+				<div class="form-group has-feedback lg left-feedback no-label">
+				  <input type="text" class="form-control no-border input-lg rounded" placeholder="Choose username">
+				  <span class="fa fa-user form-control-feedback"></span>
+				</div>
+				<div class="form-group has-feedback lg left-feedback no-label">
+				  <input type="email" class="form-control no-border input-lg rounded" placeholder="Enter email">
+				  <span class="fa fa-envelope form-control-feedback"></span>
+				</div>
+				<div class="form-group has-feedback lg left-feedback no-label">
+				  <input type="password" class="form-control no-border input-lg rounded" placeholder="Enter password">
+				  <span class="fa fa-lock form-control-feedback"></span>
+				</div>
+				<div class="form-group has-feedback lg left-feedback no-label">
+				  <input type="password" class="form-control no-border input-lg rounded" placeholder="re-enter password">
+				  <span class="fa fa-unlock form-control-feedback"></span>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-warning btn-lg btn-perspective btn-block">REGISTER</button>
+				</div>
+			</form>
+		</div><!-- /.login-wrapper -->
+		
+		<!--
+		===========================================================
+		END PAGE
+		===========================================================
+		-->
+		
+		<!--
+		===========================================================
+		Placed at the end of the document so the pages load faster
+		===========================================================
+		-->
+		<!-- MAIN JAVASRCIPT (REQUIRED ALL PAGE)-->
+		<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+		<script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'assets/plugins/retina/retina.min.js' %}"></script>
+		<script src="{% static 'assets/plugins/nicescroll/jquery.nicescroll.js' %}"></script>
+		<script src="{% static 'assets/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+		<script src="{% static 'assets/plugins/backstretch/jquery.backstretch.min.js' %}"></script>
+	</body>
+</html>

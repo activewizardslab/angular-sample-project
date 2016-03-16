@@ -1,0 +1,9 @@
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+
+#virtualenv
+.env/
+
+# tamplates
+sentir-ui-kits-1.1.0/
