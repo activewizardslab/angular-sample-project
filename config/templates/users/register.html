@@ -14,6 +14,9 @@
 		<link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
 		<link href="{% static 'assets/css/style-responsive.css' %}" rel="stylesheet">
  
+ 		<!-- PLUGINS CSS -->
+ 		<link href="{% static 'assets/plugins/validator/bootstrapValidator.min.css' %}" rel="stylesheet">
+
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -31,25 +34,26 @@
 			<img src="{% static 'assets/img/logo-login.png' %}" class="logo" alt="Logo">
 		</div>
 		<div class="login-wrapper">
-			<form role="form">
+			<form id="register-form" role="form" action="" method="post">
+				{% csrf_token %}
 				<div class="form-group has-feedback lg left-feedback no-label">
-				  <input type="text" class="form-control no-border input-lg rounded" placeholder="Full name" autofocus>
-				  <span class="fa fa-male form-control-feedback"></span>
-				</div>
-				<div class="form-group has-feedback lg left-feedback no-label">
-				  <input type="text" class="form-control no-border input-lg rounded" placeholder="Choose username">
+				  <input type="text" class="form-control no-border input-lg rounded" placeholder="First name" name="first_name" autofocus>
 				  <span class="fa fa-user form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback lg left-feedback no-label">
-				  <input type="email" class="form-control no-border input-lg rounded" placeholder="Enter email">
+				  <input type="text" class="form-control no-border input-lg rounded" placeholder="Last name" name="last_name">
+				  <span class="fa fa-user form-control-feedback"></span>
+				</div>
+				<div class="form-group has-feedback lg left-feedback no-label">
+				  <input type="email" class="form-control no-border input-lg rounded" placeholder="Enter email" name="email">
 				  <span class="fa fa-envelope form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback lg left-feedback no-label">
-				  <input type="password" class="form-control no-border input-lg rounded" placeholder="Enter password">
+				  <input type="password" class="form-control no-border input-lg rounded" placeholder="Enter password" name="password">
 				  <span class="fa fa-lock form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback lg left-feedback no-label">
-				  <input type="password" class="form-control no-border input-lg rounded" placeholder="re-enter password">
+				  <input type="password" class="form-control no-border input-lg rounded" placeholder="re-enter password" name="confirm_password">
 				  <span class="fa fa-unlock form-control-feedback"></span>
 				</div>
 				<div class="form-group">
@@ -76,5 +80,10 @@
 		<script src="{% static 'assets/plugins/nicescroll/jquery.nicescroll.js' %}"></script>
 		<script src="{% static 'assets/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
 		<script src="{% static 'assets/plugins/backstretch/jquery.backstretch.min.js' %}"></script>
+
+		<!-- PLUGINS -->
+		<script src="{% static 'assets/plugins/validator/bootstrapValidator.min.js' %}"></script>
+		<!-- REGISTER FORM VALIDATOR -->
+		<script src="{% static 'js/users/register.js' %}"></script>
 	</body>
 </html>

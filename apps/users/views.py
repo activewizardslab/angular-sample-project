@@ -1,15 +1,17 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login
 from django.views.generic import View
+from django.contrib.auth.models import User
+
+from .forms import RegistrationForm, EmailForm
 
 class LoginPageView(View):
     def get(self, request):
         return render(request, 'users/login.html')
 
     def post(self, request):
-        print(request.POST)
         user = authenticate(
             username=request.POST.get('email'),
             password=request.POST.get('password')
@@ -35,4 +37,31 @@ class RegisterPageView(View):
         return render(request, 'users/register.html')
 
     def post(self, request):
-        pass
+        form = RegistrationForm({
+            'first_name': request.POST.get('first_name'),
+            'last_name': request.POST.get('last_name'),
+            'password': request.POST.get('password'),
+            'confirm_password': request.POST.get('confirm_password'),
+            'email': request.POST.get('email')
+        })
+
+        if form.is_valid():
+            user = User.objects.create_user(
+                username=request.POST.get('email'),
+                email=request.POST.get('email'),
+                password=request.POST.get('password'),
+                first_name=request.POST.get('first_name'),
+                last_name=request.POST.get('last_name')
+            )
+            user.save()
+            login(request, user)
+            return redirect(reverse('dashboard:index'))
+
+        return render(request, 'users/register.html')
+
+def is_valid_email(request):
+    form = EmailForm({'email': request.POST.get('email')})
+    if form.is_valid():
+        return JsonResponse({'valid': True})
+
+    return JsonResponse({'valid': False})
