@@ -7,3 +7,6 @@ __pycache__/
 
 # tamplates
 sentir-ui-kits-1.1.0/
+
+# bower
+bower_components/
