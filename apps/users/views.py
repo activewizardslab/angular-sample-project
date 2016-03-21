@@ -1,14 +1,20 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
-from .forms import RegistrationForm, EmailForm
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
-class LoginPageView(View):
+from .forms import RegistrationForm, EmailForm, ForgotPwdForm, ConfirmationPwdForm
+from .mixins import NotLoginRequiredMixin
+
+class LoginPageView(NotLoginRequiredMixin, View):
     def get(self, request):
         if request.user.is_authenticated():
             return redirect(reverse('dashboard:index'))
@@ -29,7 +35,7 @@ class LoginPageView(View):
 
         return render(request, 'users/login.html', {'is_login_error': True})
 
-class ForgotPwdPageView(View):
+class ForgotPwdPageView(NotLoginRequiredMixin, View):
     def get(self, request):
         if request.user.is_authenticated():
             return redirect(reverse('dashboard:index'))
@@ -37,9 +43,19 @@ class ForgotPwdPageView(View):
         return render(request, 'users/forgot-password.html')
 
     def post(self, request):
-        pass
+        form = ForgotPwdForm({'email': request.POST.get('email')})
+        if form.is_valid():
+            print(urlsafe_base64_encode(force_bytes(form.user.pk)))
+            print(default_token_generator.make_token(form.user))
 
-class RegisterPageView(View):
+            messages.success(request, 'Email has been sent to ' + request.POST.get('email') +\
+                "'s email address. Please check its inbox to continue reseting password.")
+            return redirect(reverse('users:forgot_pwd'))
+
+        messages.error(request, 'Back end validation error.')
+        return redirect(reverse('users:forgot_pwd'))
+
+class RegisterPageView(NotLoginRequiredMixin, View):
     def get(self, request):
         if request.user.is_authenticated():
             return redirect(reverse('dashboard:index'))
@@ -72,7 +88,7 @@ class RegisterPageView(View):
             login(request, user)
 
             # set greeting message
-            request.session['greeting_message'] = True
+            messages.success(request, 'Welcome %s %s. You have successfully registered and logged in.' % (user.first_name, user.last_name))
 
             return redirect(reverse('dashboard:index'))
 
@@ -87,9 +103,58 @@ class LogoutView(LoginRequiredMixin, View):
         logout(request)
         return redirect(reverse('users:login'))
 
-def is_valid_email(request):
-    form = EmailForm({'email': request.POST.get('email')})
-    if form.is_valid():
-        return JsonResponse({'valid': True})
+class RegisterFormValidationView(View):
+    def post(self, request):
+        form = EmailForm({'email': request.POST.get('email')})
+        if form.is_valid():
+            return JsonResponse({'valid': True})
 
-    return JsonResponse({'valid': False})
+        return JsonResponse({'valid': False})
+
+class ForgotPwdFormValidationView(View):
+    def post(self, request):
+        form = ForgotPwdForm({'email': request.POST.get('email')})
+        if form.is_valid():
+            return JsonResponse({'valid': True})
+
+        return JsonResponse({'valid': False})
+
+class ResetPwdConfirmPageView(NotLoginRequiredMixin, View):
+    def get(self, request, uidb64=None, token=None):
+        user = self.get_user(uidb64, token)
+        if not user:
+            raise Http404()
+
+        return render(request, 'users/reset-password-confirm.html')
+
+    def post(self, request, uidb64=None, token=None):
+        form = ConfirmationPwdForm({
+            'password': request.POST.get('password'),
+            'confirm_password': request.POST.get('confirm_password')
+        })
+
+        user = self.get_user(uidb64, token)
+        if not user:
+            raise Http404()
+
+        if form.is_valid():
+            user.set_password(request.POST.get('password'))
+            user.save()
+
+            messages.success(request, 'Password successfully changed.')
+            return redirect(reverse('users:reset_pwd_confirm', args=(uidb64,token)))
+
+        messages.error(request, 'Back end validation error.')
+        return redirect(reverse('users:reset_pwd_confirm', args=(uidb64,token)))
+
+    def get_user(self, uidb64, token):
+        uid = urlsafe_base64_decode(uidb64)
+        try:
+            user = User.objects.get(pk=uid)
+        except (ValueError, User.DoesNotExist):
+            user = None
+
+        if user and default_token_generator.check_token(user, token):
+            return user
+
+        return None

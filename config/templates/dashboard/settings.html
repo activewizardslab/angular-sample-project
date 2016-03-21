@@ -58,7 +58,7 @@
 								Hi, <strong>{{user.first_name}} {{user.last_name}}</strong>
 							  </a>
 							  <ul class="dropdown-menu square primary margin-list-rounded with-triangle">
-								<li><a href="{% url 'dashboard:settings' %}">Account setting</a></li>
+								<li><a href="#">Account setting</a></li>
 								<li><a href="#">Change password</a></li>
 								<li class="divider"></li>
 								<li><a href="{% url 'users:logout' %}">Log out</a></li>
@@ -77,38 +77,51 @@
 				<div class="container-fluid">
 				
 					<!-- Begin page heading -->
-					<h1 class="page-heading">DASHBOARD</h1>
+					<h1 class="page-heading">Account settings</h1>
 					<!-- End page heading -->
-				
-					<!-- BEGIN EXAMPLE ALERT -->
 					{% if messages %}
-					{% for message in messages %}
+						{% for message in messages %}
+						{% if message.tags == "error" %}
+						<div class="alert alert-danger alert-bold-border square fade in alert-dismissable">
+							<strong>{{message}}</strong>
+						</div>
+						{% endif %}
+
 						{% if message.tags == "success" %}
 						<div class="alert alert-success alert-bold-border square fade in alert-dismissable">
 							<strong>{{message}}</strong>
 						</div>
 						{% endif %}
-					{% endfor %}
+						{% endfor %}
 					{% endif %}
-					<!-- END EXAMPLE ALERT -->
-					<div class="row">
-						<div class="col-sm-6">
-							<div class="the-box">
-								<div id="line-chart"></div>
-							</div>
-						</div>
-						<div class="col-sm-6">
-							<div class="the-box">
-								<div id="pie-chart"></div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6">
-							<div class="the-box">
-								<div id="dot-chart"></div>
-							</div>
-						</div>
+
+					<!-- BEGIN EXAMPLE ALERT -->
+					<div class="the-box">
+						<!-- END EXAMPLE ALERT -->
+						<form id="settings-form" method="post" action="" class="form-horizontal">
+							{% csrf_token %}
+							<fieldset>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">First Name</label>
+									<div class="col-lg-5">
+										<input type="text" class="form-control" name="first_name" value="{{user.last_name}}"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Last Name</label>
+									<div class="col-lg-5">
+										<input type="text" class="form-control" name="last_name" value="{{user.first_name}}"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-lg-5 col-lg-offset-3">
+										<button class="btn btn-primary" type="submit">Submit</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
 					</div>
 				</div><!-- /.container-fluid -->
 				
@@ -146,13 +159,8 @@
 		<script src="{% static 'assets/plugins/backstretch/jquery.backstretch.min.js' %}"></script>
  
 		<!-- PLUGINS -->
-		<!-- Load c3.css -->
-		<link href="{% static 'bower_components/c3/c3.min.css' %}" rel="stylesheet" type="text/css">
-
-		<!-- Load d3.js and c3.js -->
-		<script src="{% static 'bower_components/d3/d3.min.js' %}" charset="utf-8"></script>
-		<script src="{% static 'bower_components/c3/c3.min.js' %}"></script>
-		<!-- Custom chart with fake data -->
-		<script src="{% static 'js/dashboard/charts.js' %}"></script>
+		<script src="{% static 'assets/plugins/validator/bootstrapValidator.min.js' %}"></script>
+		<!-- SETTINGS FORM VALIDATOR -->
+		<script src="{% static 'js/dashboard/settings.js' %}"></script>
 	</body>
 </html>

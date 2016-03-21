@@ -39,7 +39,7 @@ $(document).ready(function() {
                     },
                     remote: {
                         message: 'User with this email already exists.',
-                        url: '/auth/is_valid_email/',
+                        url: '/auth/is_unique_email/',
                         data: {
                             'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
                         }
