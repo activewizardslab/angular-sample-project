@@ -54,7 +54,7 @@ $(document).ready(function() {
                     stringLength: {
                         min: 8,
                         max: 30,
-                        message: 'The username must be more than 8 and less than 30 characters long'
+                        message: 'The password must be more than 8 and less than 30 characters long'
                     },
                     identical: {
                         field: 'confirmPassword',

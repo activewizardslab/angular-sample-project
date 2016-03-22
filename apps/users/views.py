@@ -6,6 +6,9 @@ from django.views.generic import View
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.template import loader
+from django.conf import settings
 
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
@@ -16,9 +19,6 @@ from .mixins import NotLoginRequiredMixin
 
 class LoginPageView(NotLoginRequiredMixin, View):
     def get(self, request):
-        if request.user.is_authenticated():
-            return redirect(reverse('dashboard:index'))
-
         return render(request, 'users/login.html')
 
     def post(self, request):
@@ -33,21 +33,17 @@ class LoginPageView(NotLoginRequiredMixin, View):
             login(request, user)
             return redirect(reverse('dashboard:index'))
 
-        return render(request, 'users/login.html', {'is_login_error': True})
+        messages.error(request, 'Wrong email or password.')
+        return render(request, 'users/login.html')
 
 class ForgotPwdPageView(NotLoginRequiredMixin, View):
     def get(self, request):
-        if request.user.is_authenticated():
-            return redirect(reverse('dashboard:index'))
-
         return render(request, 'users/forgot-password.html')
 
     def post(self, request):
         form = ForgotPwdForm({'email': request.POST.get('email')})
         if form.is_valid():
-            print(urlsafe_base64_encode(force_bytes(form.user.pk)))
-            print(default_token_generator.make_token(form.user))
-
+            self.send_email(request, form.user)
             messages.success(request, 'Email has been sent to ' + request.POST.get('email') +\
                 "'s email address. Please check its inbox to continue reseting password.")
             return redirect(reverse('users:forgot_pwd'))
@@ -55,11 +51,22 @@ class ForgotPwdPageView(NotLoginRequiredMixin, View):
         messages.error(request, 'Back end validation error.')
         return redirect(reverse('users:forgot_pwd'))
 
+    def send_email(self, request, user):
+        context = {
+            'email': user.email,
+            'domain': request.META['HTTP_HOST'],
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'user': user,
+            'token': default_token_generator.make_token(user),
+            'protocol': 'http',
+        }
+        email_template_name='users/password_reset_email.html'
+        email = loader.render_to_string(email_template_name, context)
+
+        send_mail('Change password', email , settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+
 class RegisterPageView(NotLoginRequiredMixin, View):
     def get(self, request):
-        if request.user.is_authenticated():
-            return redirect(reverse('dashboard:index'))
-
         return render(request, 'users/register.html')
 
     def post(self, request):
@@ -142,7 +149,7 @@ class ResetPwdConfirmPageView(NotLoginRequiredMixin, View):
             user.save()
 
             messages.success(request, 'Password successfully changed.')
-            return redirect(reverse('users:reset_pwd_confirm', args=(uidb64,token)))
+            return redirect(reverse('users:login'))
 
         messages.error(request, 'Back end validation error.')
         return redirect(reverse('users:reset_pwd_confirm', args=(uidb64,token)))

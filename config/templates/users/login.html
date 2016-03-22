@@ -33,10 +33,20 @@
 		<div class="login-wrapper">
 			<form role="form" action="" method="post">
 				{% csrf_token %}
-				{% if is_login_error %}
+				{% if messages %}
+					{% for message in messages %}
+					{% if message.tags == "error" %}
 					<div class="alert alert-danger alert-bold-border square fade in alert-dismissable">
-						<strong>Wrong email or password</strong>
+						<strong>{{message}}</strong>
 					</div>
+					{% endif %}
+
+					{% if message.tags == "success" %}
+					<div class="alert alert-success alert-bold-border square fade in alert-dismissable">
+						<strong>{{message}}</strong>
+					</div>
+					{% endif %}
+					{% endfor %}
 				{% endif %}
 				<div class="form-group has-feedback lg left-feedback no-label">
 				  <input type="text" class="form-control no-border input-lg rounded" placeholder="Enter email" name="email" autofocus>

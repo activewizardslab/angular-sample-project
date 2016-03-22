@@ -23,3 +23,11 @@ DATABASES = {
         'PASSWORD': '12344321',
     },
 }
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'awo42test@gmail.com'
+EMAIL_HOST_PASSWORD = '09871234A'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
