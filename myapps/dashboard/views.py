@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib import messages
 
-from apps.users.forms import SettingsForm
+from myapps.users.forms import SettingsForm
 
 class IndexPageView(LoginRequiredMixin, View):
     login_url = reverse_lazy('users:login')

@@ -3,6 +3,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^auth/', include('apps.users.urls', namespace='users')),
-    url(r'^dashboard/', include('apps.dashboard.urls', namespace='dashboard')),
+    url(r'^auth/', include('myapps.users.urls', namespace='users')),
+    url(r'^dashboard/', include('myapps.dashboard.urls', namespace='dashboard')),
 ]

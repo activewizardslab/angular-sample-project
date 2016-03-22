@@ -11,9 +11,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.logs',
-    'apps.dashboard',
-    'apps.users',
+    # custom apps
+    'myapps.logs',
+    'myapps.dashboard',
+    'myapps.users',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -64,7 +65,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'apps.users.auth_backend.EmailBackend',
+    'myapps.users.auth_backend.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
