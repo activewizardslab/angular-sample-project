@@ -1,5 +1,6 @@
 from random import uniform, randrange, getrandbits
 from datetime import timedelta, datetime
+import time
 
 from .models import TemperatureLog, MultiDataLog, StatusLog
 
@@ -16,7 +17,7 @@ def random_date(start, end):
 
 def create_fake_temperature_log(user_pk, timestamp=None):
     if not timestamp:
-        timestamp = datetime.now().timestamp()
+        timestamp = time.time()
 
     temp_log = TemperatureLog(
         user_id=user_pk,
@@ -28,7 +29,7 @@ def create_fake_temperature_log(user_pk, timestamp=None):
 
 def create_fake_multi_data_log(user_pk, timestamp=None):
     if not timestamp:
-        timestamp = datetime.now().timestamp()
+        timestamp = time.time()
 
     multi_data_log = MultiDataLog(
         user_id=user_pk,
@@ -44,7 +45,7 @@ def create_fake_multi_data_log(user_pk, timestamp=None):
 
 def create_fake_status_log(user_pk, timestamp=None):
     if not timestamp:
-        timestamp = datetime.now().timestamp()
+        timestamp = time.time()
 
     status_log = StatusLog(
         user_id=user_pk,
