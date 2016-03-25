@@ -58,8 +58,7 @@
 								Hi, <strong>{{user.first_name}} {{user.last_name}}</strong>
 							  </a>
 							  <ul class="dropdown-menu square primary margin-list-rounded with-triangle">
-								<li><a href="#">Account setting</a></li>
-								<li><a href="#">Change password</a></li>
+								<li><a href="{% url 'dashboard:settings' %}">Account setting</a></li>
 								<li class="divider"></li>
 								<li><a href="{% url 'users:logout' %}">Log out</a></li>
 							  </ul>
@@ -98,8 +97,9 @@
 					<!-- BEGIN EXAMPLE ALERT -->
 					<div class="the-box">
 						<!-- END EXAMPLE ALERT -->
-						<form id="settings-form" method="post" action="" class="form-horizontal">
+						<form id="change-name-form" method="post" action="" class="form-horizontal">
 							{% csrf_token %}
+							<legend>Change Name</legend>
 							<fieldset>
 								<div class="form-group">
 									<label class="col-lg-3 control-label">First Name</label>
@@ -117,7 +117,39 @@
 
 								<div class="form-group">
 									<div class="col-lg-5 col-lg-offset-3">
-										<button class="btn btn-primary" type="submit">Submit</button>
+										<button class="btn btn-primary" type="submit" name="change-name">Submit</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+						<legend>Change Password</legend>
+						<form id="change-pwd-form" method="post" action="" class="form-horizontal">
+							{% csrf_token %}
+							<fieldset>
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Current Password</label>
+									<div class="col-lg-5">
+										<input type="password" class="form-control" name="current_password"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-lg-3 control-label">New Password</label>
+									<div class="col-lg-5">
+										<input type="password" class="form-control" name="new_password"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-lg-3 control-label">Confirm New Password</label>
+									<div class="col-lg-5">
+										<input type="password" class="form-control" name="confirm_new_password"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-lg-5 col-lg-offset-3">
+										<button class="btn btn-primary" type="submit" name="change-pwd">Submit</button>
 									</div>
 								</div>
 							</fieldset>

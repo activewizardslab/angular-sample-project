@@ -10,15 +10,15 @@ ALLOWED_HOSTS = []
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
-    'logs': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'awo174_logs',
-        'USER': 'root',
-        'PASSWORD': '12344321',
-    },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'awo174_users',
+        'USER': 'root',
+        'PASSWORD': '12344321',
+    },
+    'logs': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'awo174_logs',
         'USER': 'root',
         'PASSWORD': '12344321',
     },
@@ -28,6 +28,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'awo42test@gmail.com'
-EMAIL_HOST_PASSWORD = '09871234A'
+EMAIL_HOST_PASSWORD = 'knuvimdpuoumzqrz'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

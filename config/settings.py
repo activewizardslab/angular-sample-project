@@ -69,6 +69,11 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+DATABASE_ROUTERS = [
+    'myapps.users.db_router.AuthRouter',
+    'myapps.logs.db_router.LogRouter'
+]
+
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 # Internationalization

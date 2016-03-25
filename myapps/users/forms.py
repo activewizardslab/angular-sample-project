@@ -34,9 +34,31 @@ class EmailForm(forms.Form):
 
         return email
 
-class SettingsForm(forms.Form):
+class ChangeNameForm(forms.Form):
     first_name = forms.CharField(min_length=1, max_length=64)
     last_name = forms.CharField(min_length=1, max_length=64)
+
+class ChangePwdForm(forms.Form):
+    current_password = forms.CharField(min_length=8, max_length=30)
+    new_password = forms.CharField(min_length=8, max_length=30)
+    confirm_new_password = forms.CharField(min_length=8, max_length=30)
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(ChangePwdForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(ChangePwdForm, self).clean()
+
+        password = cleaned_data.get("new_password")
+        confirm_password = cleaned_data.get("confirm_new_password")
+
+        if password != confirm_password:
+            raise forms.ValidationError('Paswords don\'t match.')
+
+        if not self.user or not self.user.check_password(cleaned_data.get("current_password")):
+            raise forms.ValidationError('Password is wrong.')
+
 
 class ForgotPwdForm(forms.Form):
     email = forms.EmailField()

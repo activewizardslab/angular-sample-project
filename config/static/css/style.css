@@ -4,3 +4,7 @@ footer {
     bottom:0px;
     width:100%;
 }
+
+.container-fluid {
+    margin-bottom: 50px;
+}

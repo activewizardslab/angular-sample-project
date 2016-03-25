@@ -3,8 +3,9 @@ from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
-from myapps.users.forms import SettingsForm
+from myapps.users.forms import ChangeNameForm, ChangePwdForm
 
 class IndexPageView(LoginRequiredMixin, View):
     login_url = reverse_lazy('users:login')
@@ -21,7 +22,16 @@ class SettingsPageView(LoginRequiredMixin, View):
         return render(request, 'dashboard/settings.html')
 
     def post(self, request):
-        form = SettingsForm({
+        print(request.POST)
+        if 'first_name' in request.POST:
+            self.validate_change_name_form(request)
+        elif 'current_password' in request.POST:
+            self.validate_change_pwd_form(request)
+
+        return redirect(reverse('dashboard:settings'))
+
+    def validate_change_name_form(self, request):
+        form = ChangeNameForm({
             'first_name': request.POST.get('first_name'),
             'last_name': request.POST.get('last_name')
         })
@@ -31,8 +41,30 @@ class SettingsPageView(LoginRequiredMixin, View):
             request.user.last_name = request.POST.get('last_name')
             request.user.save()
 
-            messages.success(request, 'Your account settings successfully chaged!')
+            messages.success(request, 'Your name successfully chaged!')
         else:
             messages.error(request, 'Back end validation error!')
 
-        return redirect(reverse('dashboard:settings'))
+    def validate_change_pwd_form(self, request):
+        form = ChangePwdForm({
+            'current_password': request.POST.get('current_password'),
+            'new_password': request.POST.get('new_password'),
+            'confirm_new_password': request.POST.get('confirm_new_password')
+        }, user=request.user)
+
+        if form.is_valid():
+            email = request.user.email
+            request.user.set_password(request.POST.get('new_password'))
+            request.user.save()
+
+            logout(request)
+            user = authenticate(
+                username=email,
+                password=request.POST.get('new_password')
+            )
+            if user:
+                login(request,user)
+
+            messages.success(request, 'Your password successfully chaged!')
+        else:
+            messages.error(request, 'Back end validation error!')

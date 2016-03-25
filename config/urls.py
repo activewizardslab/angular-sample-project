@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^auth/', include('myapps.users.urls', namespace='users')),
     url(r'^dashboard/', include('myapps.dashboard.urls', namespace='dashboard')),
+    url(r'^stream/', include('myapps.logs.urls', namespace='stream')),
     url(r'^$', RedirectView.as_view(url='/auth/login/'))
 ]
