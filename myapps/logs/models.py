@@ -3,17 +3,20 @@ from django.contrib.auth.models import User
 
 class TemperatureLog(models.Model):
     user_id = models.IntegerField()
+    data_source = models.CharField(max_length=128, null=True)
     timestamp = models.BigIntegerField()
     field1_data = models.FloatField()
     field1_name = models.CharField(max_length=64, default='temperature')
 
 class StatusLog(models.Model):
     user_id = models.IntegerField()
+    data_source = models.CharField(max_length=128, null=True)
     timestamp = models.BigIntegerField()
     field1_data = models.IntegerField()
 
 class MultiDataLog(models.Model):
     user_id = models.IntegerField()
+    data_source = models.CharField(max_length=128, null=True)
     timestamp = models.BigIntegerField()
 
     field1_data = models.FloatField()

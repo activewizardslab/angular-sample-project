@@ -61,7 +61,7 @@ var dot_chart = c3.generate({
 
 function update_temperature_stream() {
     $.ajax({
-        url: "/stream/temperature/",
+        url: "/stream/temperature/?data_source="+$("#temperature-data-source").val(),
         success: function(result) {
             var data = result['data'].map(function(log) {
                 return log.field1_data;
@@ -82,11 +82,11 @@ function update_temperature_stream() {
 }
 
 update_temperature_stream();
-setInterval(update_temperature_stream, 60000);
+var temperatureId = setInterval(update_temperature_stream, 60000);
 
 function update_multi_data_stream() {
     $.ajax({
-        url: "/stream/multi_data/",
+        url: "/stream/multi_data/?data_source="+$("#multi-data-source").val(),
         success: function(result) {
             pie_chart.load({
                 columns: [
@@ -102,11 +102,11 @@ function update_multi_data_stream() {
 }
 
 update_multi_data_stream();
-setInterval(update_multi_data_stream, 60000);
+var multiDataId = setInterval(update_multi_data_stream, 60000);
 
 function update_status_stream() {
     $.ajax({
-        url: "/stream/status/",
+        url: "/stream/status/?data_source="+$("#status-data-source").val(),
         success: function(result) {
             var timestamps = result['data'].map(function(log) {
                 return log.timestamp * 1000;
@@ -132,4 +132,23 @@ function update_status_stream() {
 }
 
 update_status_stream();
-setInterval(update_status_stream, 60000);
+var statusId = setInterval(update_status_stream, 60000);
+
+// handle data source change events
+$("#status-data-source").on("change", function() {
+    update_status_stream();
+    window.clearInterval(statusId);
+    statusId = setInterval(update_status_stream, 60000);
+});
+
+$("#multi-data-source").on("change", function() {
+    update_multi_data_stream();
+    window.clearInterval(multiDataId);
+    multiDataId = setInterval(update_multi_data_stream, 60000);
+});
+
+$("#temperature-data-source").on("change", function() {
+    update_temperature_stream();
+    window.clearInterval(temperatureId);
+    temperatureId = setInterval(update_temperature_stream, 60000);
+});

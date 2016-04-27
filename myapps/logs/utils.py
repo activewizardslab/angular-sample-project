@@ -15,24 +15,26 @@ def random_date(start, end):
     return start + timedelta(seconds=random_second)
 
 
-def create_fake_temperature_log(user_pk, timestamp=None):
+def create_fake_temperature_log(user_pk, data_source, timestamp=None):
     if not timestamp:
         timestamp = time.time()
 
     temp_log = TemperatureLog(
         user_id=user_pk,
+        data_source=data_source,
         timestamp=timestamp,
         field1_data=uniform(0.0, 50.0)
     )
     temp_log.save()
 
 
-def create_fake_multi_data_log(user_pk, timestamp=None):
+def create_fake_multi_data_log(user_pk, data_source, timestamp=None):
     if not timestamp:
         timestamp = time.time()
 
     multi_data_log = MultiDataLog(
         user_id=user_pk,
+        data_source=data_source,
         timestamp=timestamp,
         field1_data=uniform(0.0, 50.0),
         field2_data=uniform(0.0, 50.0),
@@ -43,12 +45,13 @@ def create_fake_multi_data_log(user_pk, timestamp=None):
     multi_data_log.save()
 
 
-def create_fake_status_log(user_pk, timestamp=None):
+def create_fake_status_log(user_pk, data_source, timestamp=None):
     if not timestamp:
         timestamp = time.time()
 
     status_log = StatusLog(
         user_id=user_pk,
+        data_source=data_source,
         timestamp=timestamp,
         field1_data=getrandbits(1)
     )
@@ -56,6 +59,9 @@ def create_fake_status_log(user_pk, timestamp=None):
 
 
 def initial_fake_data(user):
+    """
+        Warning: deprecated function
+    """
     d1 = datetime.strptime('3/15/2014 1:30 PM', '%m/%d/%Y %I:%M %p')
     d2 = datetime.strptime('3/20/2016 4:50 AM', '%m/%d/%Y %I:%M %p')
 

@@ -9,10 +9,13 @@ import json
 
 class TemparatureLogView(LoginRequiredMixin, View):
     def get(self, request):
-        create_fake_temperature_log(request.user.pk)
+        create_fake_temperature_log(
+            request.user.pk,
+            request.GET.get('data_source')
+        )
 
         logs = TemperatureLog.objects.\
-            filter(user_id=request.user.pk).\
+            filter(user_id=request.user.pk, data_source=request.GET.get('data_source')).\
             order_by('-timestamp')[:30]
 
         result = []
@@ -25,10 +28,13 @@ class TemparatureLogView(LoginRequiredMixin, View):
 
 class StatusLogView(LoginRequiredMixin, View):
     def get(self, request):
-        create_fake_status_log(request.user.pk)
+        create_fake_status_log(
+            request.user.pk,
+            request.GET.get('data_source')
+        )
 
         logs = StatusLog.objects.\
-            filter(user_id=request.user.pk).\
+            filter(user_id=request.user.pk, data_source=request.GET.get('data_source')).\
             order_by('-timestamp')[:30]
 
         result = []
@@ -41,10 +47,13 @@ class StatusLogView(LoginRequiredMixin, View):
 
 class MultiDataLogView(LoginRequiredMixin, View):
     def get(self, request):
-        create_fake_multi_data_log(request.user.pk)
+        create_fake_multi_data_log(
+            request.user.pk,
+            request.GET.get('data_source')
+        )
 
         log = MultiDataLog.objects.\
-            filter(user_id=request.user.pk).\
+            filter(user_id=request.user.pk, data_source=request.GET.get('data_source')).\
             order_by('-timestamp').first()
 
         if log:
