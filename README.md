@@ -1,3 +1,9 @@
+Demo
+===============
+host : http://awo174.app.activewizards.com
+user : admin@admin.com
+pwd : 12344321a
+
 Setup
 ===============
 - install Python3, Mysql, nodejs, npm
